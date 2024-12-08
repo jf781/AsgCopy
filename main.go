@@ -1,10 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
-	"fmt"
-
 
 	"AsgCopy/operation"
 
@@ -18,15 +17,15 @@ func main() {
 		Name:    "asgLookup",
 		Version: "Development",
 		Usage:   "This too lists all ASGs in defined subscriptions and will create a Terraform file with the ASGs",
-		Action: run,
+		Action:  run,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
-				Name:    "subscriptionsIds",
+				Name:     "subscriptionsIds",
 				Usage:    "Provide a comma-separated list of subscription IDs to query for ASGs.",
 				Required: true,
 			},
 			&cli.StringFlag{
-				Name:    "targetDir",
+				Name:     "targetDir",
 				Usage:    "Directory to output the Terraform files.",
 				Required: false,
 				Value:    "tf-files",
@@ -40,18 +39,17 @@ func main() {
 	}
 }
 
-
 func run(c *cli.Context) error {
 	var subAsgList []operation.Asg
-	
+
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
 	}
-	
+
 	availableSubscriptions := operation.SubscriptionLookup(cred)
 
-	matched, notFound :=operation.FindMatches(availableSubscriptions, c.String("subscriptionsIds"))
+	matched, notFound := operation.FindMatches(availableSubscriptions, c.String("subscriptionsIds"))
 
 	err = operation.EnsureDir(c.String("targetDir"))
 	if err != nil {
@@ -59,7 +57,6 @@ func run(c *cli.Context) error {
 	}
 
 	os.Chdir("tf-files")
-
 
 	for _, sub := range matched {
 

@@ -2,9 +2,9 @@ package operation_test
 
 import (
 	"os"
+	"reflect"
 	"strings"
 	"testing"
-	"reflect"
 
 	"AsgCopy/operation"
 )
@@ -79,7 +79,6 @@ func TestPrintSubAsgList(t *testing.T) {
 	subName := mockAvailableSubscriptions[0].SubscriptionName
 	subAsgList := mockAsgs[mockAvailableSubscriptions[0].SubscriptionID]
 
-
 	operation.PrintSubAsgList(subName, subAsgList, mockTargetDir)
 	formattedSubName := strings.ToLower(strings.ReplaceAll(subName, " ", "-"))
 
@@ -121,8 +120,8 @@ func TestIntegration(t *testing.T) {
 
 func TestFindMatches(t *testing.T) {
 	expectedFoundSubs := []operation.Subscription{
-			{SubscriptionID: "sub1", SubscriptionName: "Subscription 1"},
-			{SubscriptionID: "sub3", SubscriptionName: "Subscription 3"},
+		{SubscriptionID: "sub1", SubscriptionName: "Subscription 1"},
+		{SubscriptionID: "sub3", SubscriptionName: "Subscription 3"},
 	}
 
 	expectedMissingSubs := []string{"unknownSub"}
@@ -130,35 +129,34 @@ func TestFindMatches(t *testing.T) {
 	foundSubs, missingSubs := operation.FindMatches(mockAvailableSubscriptions, mockProvideSubscriptions)
 
 	if !reflect.DeepEqual(foundSubs, expectedFoundSubs) {
-			t.Errorf("expected foundSubs to be %v, got %v", expectedFoundSubs, foundSubs)
+		t.Errorf("expected foundSubs to be %v, got %v", expectedFoundSubs, foundSubs)
 	}
 
 	if !reflect.DeepEqual(missingSubs, expectedMissingSubs) {
-			t.Errorf("expected missingSubs to be %v, got %v", expectedMissingSubs, missingSubs)
+		t.Errorf("expected missingSubs to be %v, got %v", expectedMissingSubs, missingSubs)
 	}
 }
-
 
 func TestEnsureDir(t *testing.T) {
 
 	// Test creating a new directory
 	err := operation.EnsureDir(mockTargetDir)
 	if err != nil {
-			t.Fatalf("EnsureDir failed to create directory: %v", err)
+		t.Fatalf("EnsureDir failed to create directory: %v", err)
 	}
 
 	info, err := os.Stat(mockTargetDir)
 	if err != nil {
-			t.Fatalf("Failed to stat the directory: %v", err)
+		t.Fatalf("Failed to stat the directory: %v", err)
 	}
 	if !info.IsDir() {
-			t.Fatalf("Path exists but is not a directory: %s", mockTargetDir)
+		t.Fatalf("Path exists but is not a directory: %s", mockTargetDir)
 	}
 
 	// Test running EnsureDir on an existing directory
 	err = operation.EnsureDir(mockTargetDir)
 	if err != nil {
-			t.Fatalf("EnsureDir failed on an existing directory: %v", err)
+		t.Fatalf("EnsureDir failed on an existing directory: %v", err)
 	}
 
 	os.RemoveAll(mockTargetDir)

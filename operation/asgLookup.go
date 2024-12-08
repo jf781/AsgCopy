@@ -115,43 +115,41 @@ func PrintSubAsgList(subName string, subAsgList []Asg, targetDir string) error {
 	return nil
 }
 
-
 func FindMatches(availableSubs []Subscription, providedSubs string) (foundSubs []Subscription, missingSubs []string) {
 	set := make(map[string]struct{}, len(availableSubs))
 	for _, v := range availableSubs {
-			set[v.SubscriptionID] = struct{}{}
+		set[v.SubscriptionID] = struct{}{}
 	}
 
-	providedSubsList :=strings.Split(providedSubs, ",")
+	providedSubsList := strings.Split(providedSubs, ",")
 
 	var matchingSubs []string
 	for _, v := range providedSubsList {
-			if _, exists := set[v]; exists {
-				matchingSubs = append(matchingSubs, v)
-			} else {
-				missingSubs = append(missingSubs, v)
-			}
+		if _, exists := set[v]; exists {
+			matchingSubs = append(matchingSubs, v)
+		} else {
+			missingSubs = append(missingSubs, v)
+		}
 	}
 
 	for _, v := range availableSubs {
-			for _, m := range matchingSubs {
-				if v.SubscriptionID == m {
-					foundSubs = append(foundSubs, v)
-				}
+		for _, m := range matchingSubs {
+			if v.SubscriptionID == m {
+				foundSubs = append(foundSubs, v)
 			}
+		}
 	}
 
 	return
 }
-
 
 func EnsureDir(path string) error {
 	info, err := os.Stat(path)
 	if os.IsNotExist(err) {
 		err := os.MkdirAll(path, 0755) // Creates all necessary parent directories
 		if err != nil {
-			 log.Fatalf("failed to create directory: %v", err)
-			 return err
+			log.Fatalf("failed to create directory: %v", err)
+			return err
 		}
 	} else if err != nil {
 		log.Fatalf("error checking directory: %v", err)
