@@ -10,6 +10,12 @@
 *.userosscache
 *.sln.docstates
 
+# OS Specific files
+.DS_Store
+
+# Test files
+/tf-files
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
