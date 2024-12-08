@@ -1,0 +1,27 @@
+name: "On Release"
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  releases-matrix:
+    name: Release Go Binary
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # build and publish in parallel: linux/amd64, windows/amd64
+        goos: [linux, windows ]
+        goarch: [amd64]
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: wangyoucao577/go-release-action@v1.52
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          goos: ${{ matrix.goos }}
+          goarch: ${{ matrix.goarch }}
+          goversion: 1.23
+          project_path: "."
+          binary_name: "AsgCopy"
+          ldflags: ${{ format('-X "main.Version={0}"', github.ref_name) }}
