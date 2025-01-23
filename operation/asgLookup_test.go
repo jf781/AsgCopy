@@ -82,7 +82,7 @@ func TestPrintSubAsgList(t *testing.T) {
 	operation.PrintSubAsgList(subName, subAsgList, mockTargetDir)
 	formattedSubName := strings.ToLower(strings.ReplaceAll(subName, " ", "-"))
 
-	fileName := formattedSubName + ".tf"
+	fileName := formattedSubName + ".tfvars"
 	if _, err := os.Stat(fileName); os.IsNotExist(err) {
 		t.Fatalf("expected file %s to be created", fileName)
 	}
@@ -107,7 +107,7 @@ func TestIntegration(t *testing.T) {
 			operation.PrintSubAsgList(sub.SubscriptionName, subAsgList, mockTargetDir)
 			formattedSubName := strings.ToLower(strings.ReplaceAll(sub.SubscriptionName, " ", "-"))
 
-			fileName := formattedSubName + ".tf"
+			fileName := formattedSubName + ".tfvars"
 			if _, err := os.Stat(fileName); os.IsNotExist(err) {
 				t.Fatalf("expected file %s to be created", fileName)
 			}

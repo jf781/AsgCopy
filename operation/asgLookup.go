@@ -81,13 +81,13 @@ func PrintSubAsgList(subName string, subAsgList []Asg, targetDir string) error {
 		os.Chdir(targetDir)
 		formattedSubName := strings.ToLower(strings.ReplaceAll(subName, " ", "-"))
 
-		file, err := os.Create(formattedSubName + ".tf")
+		file, err := os.Create(formattedSubName + ".tfvars")
 		if err != nil {
 			log.Fatalf("failed to create output file: %v", err)
 		}
 		defer file.Close()
 
-		_, err = file.WriteString("asgs = [\n")
+		_, err = file.WriteString("prod_asgs = [\n")
 		if err != nil {
 			log.Fatalf("failed to write to file: %v", err)
 		}
@@ -95,9 +95,9 @@ func PrintSubAsgList(subName string, subAsgList []Asg, targetDir string) error {
 		for _, asg := range subAsgList {
 			// Formatting the block of Terraform code
 			block := `  { 
-		asgName           = "` + asg.AsgName + `"
-		resourceGroupName = "` + asg.ResourceGroupName + `"
-	},` + "\n"
+    name           = "` + asg.AsgName + `"
+    resource_group_name = "` + asg.ResourceGroupName + `"
+  },` + "\n"
 			_, err = file.WriteString(block)
 			if err != nil {
 				log.Fatalf("failed to write to file: %v", err)

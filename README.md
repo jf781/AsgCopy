@@ -1,14 +1,14 @@
 # ASG Lookup
 
-This project is a tool to list all Application Security Groups (ASGs) in defined Azure subscriptions and create a Terraform file that will create the ASGs in a different subscription. 
+This project will create a utility to list all Application Security Groups (ASGs) in defined Azure subscriptions and create a Terraform file that will create the ASGs in a different subscription. 
 
 The application will create a Terraform file with a list of ASGs that are present in the source subscription.  The Terraform files will be named after the subscription and will contain the ASGs in the following format.
   
   ```hcl
-  asgs = [
+  prod_asgs = [
     { 
-      asgName           = "asg1"
-      resourceGroupName = "rg1"
+      name           = "asg1"
+      resource_group_name = "rg1"
     },
   ]
   ```
@@ -71,5 +71,5 @@ Validates if the directory exists and creates it if it doesn't.
 To run the test against the functions, use the following command:
 
 ```sh
-go test ./operation
+go test -v ./operation
 ```
